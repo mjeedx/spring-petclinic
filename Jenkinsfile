@@ -3,22 +3,15 @@ pipeline {
     
     environment {
         TAG = "$BRANCH_NAME"+"."+"$BUILD_NUMBER"
-            
     }
     
     stages {
         stage("Build jartifact") {
             steps {
-                echo "=============== Building starts =================="
-                sh 'pwd'
                 sh './mvnw package'
-                echo "=============== Building is complete =================="
                 sh 'mkdir docker'
                 sh 'mv Dockerfile docker/'
                 sh 'mv target/*.jar docker/main.jar'
-                sh 'echo GIT_COMMIT: $GIT_COMMIT'
-                sh 'echo BUILD_TAG: $BUILD_TAG'
-                sh 'echo BUILD_NUMBER: $BUILD_NUMBER'
             }            
         }
         stage("Build_image") {
@@ -41,6 +34,15 @@ pipeline {
                 }
                 sh 'docker image prune -a -f'
             }
+        }
+        stage("Deploy to ECS") {
+            steps {
+                ansiblePlaybook(
+            
+            
+            }
+        
+        
         }
     }
 
