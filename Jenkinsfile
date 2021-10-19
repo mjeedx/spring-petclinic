@@ -41,7 +41,7 @@ pipeline {
                 sh 'pwd'
                 ansiblePlaybook(
                     playbook: 'ansible/deploy_ecs.yml',
-                    extras: '-e Work_env=Production'
+                    extras: '-e Work_env=Production -e build_name=main.$BUILD_NUMBER'
                 )
             
             }
