@@ -1,7 +1,6 @@
 ---
 ecr_registry: 178258651770.dkr.ecr.eu-central-1.amazonaws.com/petclinic
 work_env: "{{ Work_env }}"
-ecs_family: "petclinic_main"
-#ecs_family: "petclinic_{{ build_name.split('.')[0] }}"
+ecs_family: "petclinic_{{ build_name.split('.')[0] }}"
 cluster_name: "pet-prod"
 region: "eu-central-1"
