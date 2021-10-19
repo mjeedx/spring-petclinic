@@ -38,12 +38,12 @@
 
   when: work_env == "QA"
 
-# - name: Stop a task
-#   community.aws.ecs_task:
-#     operation: stop
-#     cluster: "{{ cluster_name }}"
-#     task_definition: "{{ ecs_family }}"
-#     task: "5e75f062f8ee4dc38406ecf26d6e6ee2"
+- name: Stop a task
+  community.aws.ecs_task:
+    operation: stop
+    cluster: "{{ cluster_name }}"
+    task_definition: "{{ ecs_family }}"
+    task: "*"
 
 - name: Run task
   community.aws.ecs_task:
