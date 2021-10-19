@@ -6,7 +6,7 @@ pipeline {
     }
     
     stages {
-        stage("Build jartifact") {
+        stage("Build JARtifact") {
             steps {
                 sh './mvnw package'
                 sh 'mkdir docker'
@@ -40,6 +40,7 @@ pipeline {
                 ansiblePlaybook(
                     playbook: 'ansible/deploy_ecs.yml',
                     extras: '-e Work_env=Production -e build_name=$build_name'
+                )
             
             }
         
