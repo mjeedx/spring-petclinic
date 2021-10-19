@@ -7,10 +7,7 @@ pipeline {
     
     stages {
         stage("Build JARtifact") {
-            steps {
-                sh 'echo starting-starting-build_name'
-                sh 'echo $BUILD_NAME'
-                
+            steps {             
                 sh './mvnw package'
                 sh 'mkdir docker'
                 sh 'mv Dockerfile docker/'
@@ -44,7 +41,7 @@ pipeline {
                 sh 'pwd'
                 ansiblePlaybook(
                     playbook: 'ansible/deploy_ecs.yml',
-                    extras: '-e Work_env=Production -e build_name=$build_name'
+                    extras: '-e Work_env=Production'
                 )
             
             }
