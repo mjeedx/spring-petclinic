@@ -37,6 +37,8 @@ pipeline {
         }
         stage("Deploy to ECS") {
             steps {
+                sh 'echo now you are in'
+                sh 'pwd'
                 ansiblePlaybook(
                     playbook: 'ansible/deploy_ecs.yml',
                     extras: '-e Work_env=Production -e build_name=$build_name'
