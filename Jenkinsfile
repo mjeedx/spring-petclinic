@@ -38,7 +38,8 @@ pipeline {
         stage("Deploy to ECS") {
             steps {
                 ansiblePlaybook(
-            
+                    playbook: 'ansible/deploy_ecs.yml',
+                    extras: '-e Work_env=Production -e build_name=$build_name'
             
             }
         
