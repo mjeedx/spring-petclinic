@@ -1,0 +1,56 @@
+- name: AWS task def
+  hosts: local
+  connection: local
+  vars:
+    work_env: "{{ Work_env }}"
+    repo: "178258651770.dkr.ecr.eu-central-1.amazonaws.com/petclinic"
+
+  tasks:
+  - name: Create production task definition
+    community.aws.ecs_taskdefinition:
+      family: "petclinic_{{ build_name.split('.')[0] }}"
+      containers:
+      - name: petclinic
+        essential: true
+        image: "{{ repo }}:{{ build_name }}"
+        portMappings:
+        - containerPort: 8080
+          hostPort: 80
+      launch_type: EC2
+      cpu: 256
+      memory: 256
+      network_mode: bridge
+      force_create: true
+      state: present
+    when: work_env == "Production"
+  
+  - name: Create QA task definition
+    community.aws.ecs_taskdefinition:
+      family: "petclinic_{{ build_name.split('.')[0] }}"
+      containers:
+      - name: petclinic
+        essential: true
+        image: "{{ repo }}:{{ build_name }}"
+        portMappings:
+        - containerPort: 8080
+          hostPort: 8080
+      launch_type: EC2
+      cpu: 256
+      memory: 256
+      state: present
+      network_mode: bridge
+
+    when: work_env == "QA"
+
+  - name: Run task
+    community.aws.ecs_task:
+      operation: run
+      cluster: pet-prod
+      task_definition: petclinic_main
+      count: 1
+      started_by: ansible_user
+      launch_type: EC2
+    #register: task_output
+
+
+

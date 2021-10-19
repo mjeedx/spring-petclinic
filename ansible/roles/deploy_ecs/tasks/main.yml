@@ -1,0 +1,58 @@
+---
+  # vars:
+  #   work_env: "{{ Work_env }}"
+
+- name: Create production task definition
+  community.aws.ecs_taskdefinition:
+    family: "{{ ecs_family }}"
+    containers:
+    - name: petclinic
+      essential: true
+      image: "{{ ecr_registry }}:{{ build_name }}"
+      portMappings:
+      - containerPort: 8080
+        hostPort: 80
+    launch_type: EC2
+    cpu: 256
+    memory: 256
+    network_mode: bridge
+    force_create: true
+    state: present
+  when: work_env == "Production"
+
+- name: Create QA task definition
+  community.aws.ecs_taskdefinition:
+    family: "{{ ecs_family }}"
+    containers:
+    - name: petclinic
+      essential: true
+      image: "{{ ecr_registry }}:{{ build_name }}"
+      portMappings:
+      - containerPort: 8080
+        hostPort: 8080
+    launch_type: EC2
+    cpu: 256
+    memory: 256
+    state: present
+    network_mode: bridge
+
+  when: work_env == "QA"
+
+# - name: Stop a task
+#   community.aws.ecs_task:
+#     operation: stop
+#     cluster: "{{ cluster_name }}"
+#     task_definition: "{{ ecs_family }}"
+#     task: "5e75f062f8ee4dc38406ecf26d6e6ee2"
+
+- name: Run task
+  community.aws.ecs_task:
+    operation: run
+    cluster: "{{ cluster_name }}"
+    task_definition: "{{ ecs_family }}"
+    count: 1
+    started_by: ansible_user
+    launch_type: EC2
+  register: task_output
+
+# - debug: msg="{{ task_output.taskArn }}"
