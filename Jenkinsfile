@@ -9,7 +9,7 @@ pipeline {
         stage("Build JARtifact") {
             steps {
                 sh 'echo starting-starting-build_name'
-                sh 'echo $build_name'
+                sh 'echo $BUILD_NAME'
                 
                 sh './mvnw package'
                 sh 'mkdir docker'
