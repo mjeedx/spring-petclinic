@@ -1,7 +1,4 @@
 ---
-  # vars:
-  #   work_env: "{{ Work_env }}"
-
 - name: Create production task definition
   community.aws.ecs_taskdefinition:
     family: "{{ ecs_family }}"
